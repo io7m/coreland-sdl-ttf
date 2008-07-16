@@ -3,7 +3,7 @@
 default: all
 
 all:\
-sdl-ttf.ali sdl-ttf.o
+sdl-ttf-ada.a sdl-ttf.ali sdl-ttf.o
 
 # -- SYSDEPS start
 libs-sdl:
@@ -90,9 +90,13 @@ conf-cc
 mk-systype:\
 conf-cc
 
+sdl-ttf-ada.a:\
+cc-slib sdl-ttf-ada.sld sdl-ttf.o
+	./cc-slib sdl-ttf-ada sdl-ttf.o
+
 sdl-ttf.ali:\
-ada-compile sdl-ttf.ads
-	./ada-compile sdl-ttf.ads
+ada-compile sdl-ttf.adb sdl-ttf.ads
+	./ada-compile sdl-ttf.adb
 
 sdl-ttf.o:\
 sdl-ttf.ali
@@ -100,7 +104,7 @@ sdl-ttf.ali
 clean-all: sysdeps_clean obj_clean ext_clean
 clean: obj_clean
 obj_clean:
-	rm -f sdl-ttf.ali sdl-ttf.o
+	rm -f sdl-ttf-ada.a sdl-ttf.ali sdl-ttf.o
 ext_clean:
 	rm -f conf-adatype conf-cctype conf-ldtype conf-systype mk-ctxt
 
