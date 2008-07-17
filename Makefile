@@ -6,6 +6,12 @@ all:\
 sdl-ttf-ada.a sdl-ttf.ali sdl-ttf.o
 
 # -- SYSDEPS start
+flags-sdl-ada:
+	@echo SYSDEPS sdl-ada-flags run create flags-sdl-ada 
+	@(cd SYSDEPS/modules/sdl-ada-flags && ./run)
+libs-sdl-ada:
+	@echo SYSDEPS sdl-ada-libs run create libs-sdl-ada 
+	@(cd SYSDEPS/modules/sdl-ada-libs && ./run)
 libs-sdl:
 	@echo SYSDEPS sdl-libs run create libs-sdl 
 	@(cd SYSDEPS/modules/sdl-libs && ./run)
@@ -14,6 +20,12 @@ libs-sdl-ttf:
 	@(cd SYSDEPS/modules/sdl-ttf-libs && ./run)
 
 
+sdl-ada-flags_clean:
+	@echo SYSDEPS sdl-ada-flags clean flags-sdl-ada 
+	@(cd SYSDEPS/modules/sdl-ada-flags && ./clean)
+sdl-ada-libs_clean:
+	@echo SYSDEPS sdl-ada-libs clean libs-sdl-ada 
+	@(cd SYSDEPS/modules/sdl-ada-libs && ./clean)
 sdl-libs_clean:
 	@echo SYSDEPS sdl-libs clean libs-sdl 
 	@(cd SYSDEPS/modules/sdl-libs && ./clean)
@@ -23,6 +35,8 @@ sdl-ttf-libs_clean:
 
 
 sysdeps_clean:\
+sdl-ada-flags_clean \
+sdl-ada-libs_clean \
 sdl-libs_clean \
 sdl-ttf-libs_clean \
 
@@ -31,14 +45,14 @@ sdl-ttf-libs_clean \
 
 
 ada-bind:\
-conf-adabind conf-systype conf-adatype conf-adafflist flags-adasdl
+conf-adabind conf-systype conf-adatype conf-adafflist flags-sdl-ada
 
 ada-compile:\
 conf-adacomp conf-adatype conf-systype conf-adacflags conf-adafflist \
-	flags-adasdl
+	flags-sdl-ada
 
 ada-link:\
-conf-adalink conf-adatype conf-systype conf-aldfflist libs-adasdl libs-sdl
+conf-adalink conf-adatype conf-systype conf-aldfflist libs-sdl-ada
 
 ada-srcmap:\
 conf-adacomp conf-adatype conf-systype
