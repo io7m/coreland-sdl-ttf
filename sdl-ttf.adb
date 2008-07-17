@@ -154,62 +154,62 @@ package body SDL.ttf is
     end if;
   end SizeUNICODE;
 
-  function RenderText_Solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderText_Solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderText_Solid (f, cs.new_string (text), fg);
   end RenderText_Solid;
 
-  function RenderUTF8_Solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderUTF8_Solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderUTF8_Solid (f, cs.new_string (text), fg);
   end RenderUTF8_Solid;
 
-  function RenderUNICODE_Solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderUNICODE_Solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderUNICODE_Solid (f, cs.new_string (text), fg);
   end RenderUNICODE_Solid;
 
-  function RenderGlyph_Solid (f: font_t; glyph: wide_character; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderGlyph_Solid (f: font_t; glyph: wide_character; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderGlyph_Solid (f, sdl.uint16 (wide_character'pos (glyph)), fg);
   end RenderGlyph_Solid;
  
-  function RenderText_Shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t is
+  function RenderText_Shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t is
   begin
     return RenderText_Shaded (f, cs.new_string (text), fg, bg);
   end RenderText_Shaded;
 
-  function RenderUTF8_Shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t is
+  function RenderUTF8_Shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t is
   begin
     return RenderUTF8_Shaded (f, cs.new_string (text), fg, bg);
   end RenderUTF8_Shaded;
 
-  function RenderUNICODE_Shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t is
+  function RenderUNICODE_Shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t is
   begin
     return RenderUNICODE_Shaded (f, cs.new_string (text), fg, bg);
   end RenderUNICODE_Shaded;
 
-  function RenderGlyph_Shaded (f: font_t; glyph: wide_character; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t is
+  function RenderGlyph_Shaded (f: font_t; glyph: wide_character; fg: color_t; bg: color_t) return vid.surface_ptr_t is
   begin
     return RenderGlyph_Shaded (f, sdl.uint16 (wide_character'pos (glyph)), fg, bg);
   end RenderGlyph_Shaded;
  
-  function RenderText_Blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderText_Blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderText_Blended (f, cs.new_string (text), fg);
   end RenderText_Blended;
 
-  function RenderUTF8_Blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderUTF8_Blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderUTF8_Blended (f, cs.new_string (text), fg);
   end RenderUTF8_Blended;
 
-  function RenderUNICODE_Blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderUNICODE_Blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderUNICODE_Blended (f, cs.new_string (text), fg);
   end RenderUNICODE_Blended;
 
-  function RenderGlyph_Blended (f: font_t; glyph: wide_character; fg: vid.color_t) return vid.surface_ptr_t is
+  function RenderGlyph_Blended (f: font_t; glyph: wide_character; fg: color_t) return vid.surface_ptr_t is
   begin
     return RenderGlyph_Blended (f, sdl.uint16 (wide_character'pos (glyph)), fg);
   end RenderGlyph_Blended;

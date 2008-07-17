@@ -1,3 +1,4 @@
+with SDL;
 with SDL.rwops;
 with SDL.video;
 with interfaces.c.strings;
@@ -11,6 +12,17 @@ package SDL.ttf is
 
   -- TTF_Font type is completely abstract
   type font_t is access system.address;
+
+  -- Specialized color type, necessary because SDL_ttf expects color structures
+  -- by value and this requires a pragma convention.
+
+  type color_t is record
+    r: SDL.uint8;
+    g: SDL.uint8;
+    b: SDL.uint8;
+    a: SDL.uint8;
+  end record;
+  pragma convention (c_pass_by_copy, color_t);
 
   --
   -- This function tells the library whether UNICODE text is generally
@@ -206,22 +218,22 @@ package SDL.ttf is
   -- to the text color.
   -- This function returns the new surface, or NULL if there was an error.
   --
-  function RenderText_Solid (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUTF8_Solid (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUNICODE_Solid (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_text_solid (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t renames RenderText_Solid;
-  function render_utf8_solid (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t renames RenderUTF8_Solid;
-  function render_unicode_solid (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t renames RenderUNICODE_Solid;
+  function RenderText_Solid (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t;
+  function RenderUTF8_Solid (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t;
+  function RenderUNICODE_Solid (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t;
+  function render_text_solid (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t renames RenderText_Solid;
+  function render_utf8_solid (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t renames RenderUTF8_Solid;
+  function render_unicode_solid (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t renames RenderUNICODE_Solid;
   pragma import (c, RenderText_Solid, "TTF_RenderText_Solid");
   pragma import (c, RenderUTF8_Solid, "TTF_RenderUTF8_Solid");
   pragma import (c, RenderUNICODE_Solid, "TTF_RenderUNICODE_Solid");
 
-  function RenderText_Solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUTF8_Solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUNICODE_Solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_text_solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t renames RenderText_Solid;
-  function render_utf8_solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t renames RenderUTF8_Solid;
-  function render_unicode_solid (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t renames RenderUNICODE_Solid;
+  function RenderText_Solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t;
+  function RenderUTF8_Solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t;
+  function RenderUNICODE_Solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t;
+  function render_text_solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t renames RenderText_Solid;
+  function render_utf8_solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t renames RenderUTF8_Solid;
+  function render_unicode_solid (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t renames RenderUNICODE_Solid;
   pragma inline (RenderText_Solid);
   pragma inline (RenderUTF8_Solid);
   pragma inline (RenderUNICODE_Solid);
@@ -234,12 +246,12 @@ package SDL.ttf is
   -- centering in the X direction, and aligned normally in the Y direction.
   -- This function returns the new surface, or NULL if there was an error.
   --
-  function RenderGlyph_Solid (f: font_t; glyph: sdl.uint16; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_glyph_solid (f: font_t; glyph: sdl.uint16; fg: vid.color_t) return vid.surface_ptr_t renames RenderGlyph_Solid;
+  function RenderGlyph_Solid (f: font_t; glyph: sdl.uint16; fg: color_t) return vid.surface_ptr_t;
+  function render_glyph_solid (f: font_t; glyph: sdl.uint16; fg: color_t) return vid.surface_ptr_t renames RenderGlyph_Solid;
   pragma import (c, RenderGlyph_Solid, "TTF_RenderGlyph_Solid");
 
-  function RenderGlyph_Solid (f: font_t; glyph: wide_character; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_glyph_solid (f: font_t; glyph: wide_character; fg: vid.color_t) return vid.surface_ptr_t renames RenderGlyph_Solid;
+  function RenderGlyph_Solid (f: font_t; glyph: wide_character; fg: color_t) return vid.surface_ptr_t;
+  function render_glyph_solid (f: font_t; glyph: wide_character; fg: color_t) return vid.surface_ptr_t renames RenderGlyph_Solid;
   pragma inline (RenderGlyph_Solid);
 
   --
@@ -248,22 +260,22 @@ package SDL.ttf is
   -- while other pixels have varying degrees of the foreground color.
   -- This function returns the new surface, or NULL if there was an error.
   --
-  function RenderText_Shaded (f: font_t; text: cs.chars_ptr; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUTF8_Shaded (f: font_t; text: cs.chars_ptr; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUNICODE_Shaded (f: font_t; text: cs.chars_ptr; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function render_text_shaded (f: font_t; text: cs.chars_ptr; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderText_Shaded;
-  function render_utf8_shaded (f: font_t; text: cs.chars_ptr; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderUTF8_Shaded;
-  function render_unicode_shaded (f: font_t; text: cs.chars_ptr; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderUNICODE_Shaded;
+  function RenderText_Shaded (f: font_t; text: cs.chars_ptr; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function RenderUTF8_Shaded (f: font_t; text: cs.chars_ptr; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function RenderUNICODE_Shaded (f: font_t; text: cs.chars_ptr; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function render_text_shaded (f: font_t; text: cs.chars_ptr; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderText_Shaded;
+  function render_utf8_shaded (f: font_t; text: cs.chars_ptr; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderUTF8_Shaded;
+  function render_unicode_shaded (f: font_t; text: cs.chars_ptr; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderUNICODE_Shaded;
   pragma import (c, RenderText_Shaded, "TTF_RenderText_Shaded");
   pragma import (c, RenderUTF8_Shaded, "TTF_RenderUTF8_Shaded");
   pragma import (c, RenderUNICODE_Shaded, "TTF_RenderUNICODE_Shaded");
 
-  function RenderText_Shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUTF8_Shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUNICODE_Shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function render_text_shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderText_Shaded;
-  function render_utf8_shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderUTF8_Shaded;
-  function render_unicode_shaded (f: font_t; text: string; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderUNICODE_Shaded;
+  function RenderText_Shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function RenderUTF8_Shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function RenderUNICODE_Shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function render_text_shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderText_Shaded;
+  function render_utf8_shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderUTF8_Shaded;
+  function render_unicode_shaded (f: font_t; text: string; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderUNICODE_Shaded;
   pragma inline (RenderText_Shaded);
   pragma inline (RenderUTF8_Shaded);
   pragma inline (RenderUNICODE_Shaded);
@@ -276,12 +288,12 @@ package SDL.ttf is
   -- direction, and aligned normally in the Y direction.
   -- This function returns the new surface, or NULL if there was an error.
   --
-  function RenderGlyph_Shaded (f: font_t; glyph: sdl.uint16; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function render_glyph_shaded (f: font_t; glyph: sdl.uint16; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderGlyph_Shaded;
+  function RenderGlyph_Shaded (f: font_t; glyph: sdl.uint16; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function render_glyph_shaded (f: font_t; glyph: sdl.uint16; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderGlyph_Shaded;
   pragma import (c, RenderGlyph_Shaded, "TTF_RenderGlyph_Shaded");
 
-  function RenderGlyph_Shaded (f: font_t; glyph: wide_character; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t;
-  function render_glyph_shaded (f: font_t; glyph: wide_character; fg: vid.color_t; bg: vid.color_t) return vid.surface_ptr_t renames RenderGlyph_Shaded;
+  function RenderGlyph_Shaded (f: font_t; glyph: wide_character; fg: color_t; bg: color_t) return vid.surface_ptr_t;
+  function render_glyph_shaded (f: font_t; glyph: wide_character; fg: color_t; bg: color_t) return vid.surface_ptr_t renames RenderGlyph_Shaded;
   pragma inline (RenderGlyph_Shaded);
 
   --
@@ -289,22 +301,22 @@ package SDL.ttf is
   -- using alpha blending to dither the font with the given color.
   -- This function returns the new surface, or NULL if there was an error.
   --
-  function RenderText_Blended (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUTF8_Blended (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUNICODE_Blended (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_text_blended (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t renames RenderText_Blended;
-  function render_utf8_blended (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t renames RenderUTF8_Blended;
-  function render_unicode_blended (f: font_t; text: cs.chars_ptr; fg: vid.color_t) return vid.surface_ptr_t renames RenderUNICODE_Blended;
+  function RenderText_Blended (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t;
+  function RenderUTF8_Blended (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t;
+  function RenderUNICODE_Blended (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t;
+  function render_text_blended (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t renames RenderText_Blended;
+  function render_utf8_blended (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t renames RenderUTF8_Blended;
+  function render_unicode_blended (f: font_t; text: cs.chars_ptr; fg: color_t) return vid.surface_ptr_t renames RenderUNICODE_Blended;
   pragma import (c, RenderText_Blended, "TTF_RenderText_Blended");
   pragma import (c, RenderUTF8_Blended, "TTF_RenderUTF8_Blended");
   pragma import (c, RenderUNICODE_Blended, "TTF_RenderUNICODE_Blended");
 
-  function RenderText_Blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUTF8_Blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t;
-  function RenderUNICODE_Blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_text_blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t renames RenderText_Blended;
-  function render_utf8_blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t renames RenderUTF8_Blended;
-  function render_unicode_blended (f: font_t; text: string; fg: vid.color_t) return vid.surface_ptr_t renames RenderUNICODE_Blended;
+  function RenderText_Blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t;
+  function RenderUTF8_Blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t;
+  function RenderUNICODE_Blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t;
+  function render_text_blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t renames RenderText_Blended;
+  function render_utf8_blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t renames RenderUTF8_Blended;
+  function render_unicode_blended (f: font_t; text: string; fg: color_t) return vid.surface_ptr_t renames RenderUNICODE_Blended;
   pragma inline (RenderText_Blended);
   pragma inline (RenderUTF8_Blended);
   pragma inline (RenderUNICODE_Blended);
@@ -316,12 +328,12 @@ package SDL.ttf is
   -- direction, and aligned normally in the Y direction.
   -- This function returns the new surface, or NULL if there was an error.
   --
-  function RenderGlyph_Blended (f: font_t; glyph: sdl.uint16; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_glyph_blended (f: font_t; glyph: sdl.uint16; fg: vid.color_t) return vid.surface_ptr_t renames RenderGlyph_Blended;
+  function RenderGlyph_Blended (f: font_t; glyph: sdl.uint16; fg: color_t) return vid.surface_ptr_t;
+  function render_glyph_blended (f: font_t; glyph: sdl.uint16; fg: color_t) return vid.surface_ptr_t renames RenderGlyph_Blended;
   pragma import (c, RenderGlyph_Blended, "TTF_RenderGlyph_Blended");
 
-  function RenderGlyph_Blended (f: font_t; glyph: wide_character; fg: vid.color_t) return vid.surface_ptr_t;
-  function render_glyph_blended (f: font_t; glyph: wide_character; fg: vid.color_t) return vid.surface_ptr_t renames RenderGlyph_Blended;
+  function RenderGlyph_Blended (f: font_t; glyph: wide_character; fg: color_t) return vid.surface_ptr_t;
+  function render_glyph_blended (f: font_t; glyph: wide_character; fg: color_t) return vid.surface_ptr_t renames RenderGlyph_Blended;
   pragma inline (RenderGlyph_Blended);
 
   --
