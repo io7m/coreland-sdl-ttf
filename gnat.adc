@@ -1,0 +1,4 @@
+
+-- ./sdl-ttf.apk
+pragma source_file_name(SDL.ttf, spec_file_name => "sdl-ttf.ads");
+pragma source_file_name(SDL.ttf, body_file_name => "sdl-ttf.adb");
