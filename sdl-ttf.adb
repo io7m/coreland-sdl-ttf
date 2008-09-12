@@ -1,146 +1,160 @@
-package body SDL.ttf is
+package body sdl.ttf is
   use type c.int;
 
-  function Init return boolean is
-    ret : constant c.int := Init;
+  function init return boolean is
+    ret : constant c.int := init;
   begin
     if ret = 0 then
-      return true;
+      return True;
     else
-      return false;
+      return False;
     end if;
-  end Init;
+  end init;
 
-  procedure ByteSwappedUNICODE (swapped : boolean) is
+  procedure byteswappedunicode (swapped : boolean) is
   begin
     if swapped then
-      ByteSwappedUNICODE (c.int (1));
+      byteswappedunicode (c.int (1));
     else
-      ByteSwappedUNICODE (c.int (0));
+      byteswappedunicode (c.int (0));
     end if;
-  end ByteSwappedUNICODE;
+  end byteswappedunicode;
 
-  function OpenFont
+  function openfont
    (file      : string;
-    pointsize : integer) return font_t
+    pointsize : integer)
+    return font_t
   is
-    ch_array  : aliased c.char_array := c.to_c (file);
+    ch_array : aliased c.char_array := c.to_c (file);
   begin
-    return OpenFont (cs.to_chars_ptr (ch_array'unchecked_access),
+    return openfont
+     (cs.to_chars_ptr (ch_array'unchecked_access),
       c.int (pointsize));
-  end OpenFont;
+  end openfont;
 
-  function OpenFontIndex
+  function openfontindex
    (file      : string;
     pointsize : integer;
-    index     : long_integer) return font_t
+    index     : g) return font_t
   is
-    ch_array  : aliased c.char_array := c.to_c (file);
+    ch_array : aliased c.char_array := c.to_c (file);
   begin
-    return OpenFontIndex (cs.to_chars_ptr (ch_array'unchecked_access),
-      c.int (pointsize), c.long (index));
-  end OpenFontIndex;
+    return openfontindex
+     (cs.to_chars_ptr (ch_array'unchecked_access),
+      c.int (pointsize),
+      c.long (index));
+  end openfontindex;
 
-  function OpenFontRW
-   (src       : SDL.RWops.rwops_ptr_t;
+  function openfontrw
+   (src       : sdl.rwops.rwops_access_t;
     freesrc   : integer;
     pointsize : integer) return font_t is
   begin
-    return OpenFontRW (src, c.int (freesrc), c.int (pointsize));
-  end OpenFontRW;
+    return openfontrw (src, c.int (freesrc), c.int (pointsize));
+  end openfontrw;
 
-  function OpenFontIndexRW
-   (src       : SDL.RWops.rwops_ptr_t;
+  function openfontindexrw
+   (src       : sdl.rwops.rwops_access_t;
     freesrc   : integer;
     pointsize : integer;
-    index     : long_integer) return font_t is
+    index     : g) return font_t is
   begin
-    return OpenFontIndexRW (src, c.int (freesrc), c.int (pointsize),
+    return openfontindexrw
+     (src,
+      c.int (freesrc),
+      c.int (pointsize),
       c.long (index));
-  end OpenFontIndexRW;
+  end openfontindexrw;
 
-  function FontHeight (font : font_t) return integer is
-    ret : constant c.int := FontHeight (font);
+  function fontheight (font : font_t) return integer is
+    ret : constant c.int := fontheight (font);
   begin
     return integer (ret);
-  end FontHeight;
+  end fontheight;
 
-  function FontAscent (font : font_t) return integer is
-    ret : constant c.int := FontAscent (font);
+  function fontascent (font : font_t) return integer is
+    ret : constant c.int := fontascent (font);
   begin
     return integer (ret);
-  end FontAscent;
+  end fontascent;
 
-  function FontDescent (font : font_t) return integer is
-    ret : constant c.int := FontDescent (font);
+  function fontdescent (font : font_t) return integer is
+    ret : constant c.int := fontdescent (font);
   begin
     return integer (ret);
-  end FontDescent;
+  end fontdescent;
 
-  function FontLineSkip (font : font_t) return integer is
-    ret : constant c.int := FontLineSkip (font);
+  function fontlineskip (font : font_t) return integer is
+    ret : constant c.int := fontlineskip (font);
   begin
     return integer (ret);
-  end FontLineSkip;
+  end fontlineskip;
 
-  function FontFaces (font : font_t) return long_integer is
-    ret : constant c.long := FontFaces (font);
+  function fontfaces (font : font_t) return g is
+    ret : constant c.long := fontfaces (font);
   begin
-    return long_integer (ret);
-  end FontFaces;
+    return g (ret);
+  end fontfaces;
 
-  function FontFaceIsFixedWidth (font : font_t) return boolean is
-    ret : constant c.int := FontFaceIsFixedWidth (font);
+  function fontfaceisfixedwidth (font : font_t) return boolean is
+    ret : constant c.int := fontfaceisfixedwidth (font);
   begin
     if ret = 1 then
-      return true;
+      return True;
     else
-      return false;
+      return False;
     end if;
-  end FontFaceIsFixedWidth;
+  end fontfaceisfixedwidth;
 
-  function FontFaceFamilyName (font : font_t) return string is
+  function fontfacefamilyname (font : font_t) return string is
   begin
-    return cs.value (FontFaceFamilyName (font));
-  end FontFaceFamilyName;
+    return cs.Value (fontfacefamilyname (font));
+  end fontfacefamilyname;
 
-  function FontFaceStyleName (font : font_t) return string is
+  function fontfacestylename (font : font_t) return string is
   begin
-    return cs.value (FontFaceStyleName (font));
-  end FontFaceStyleName;
- 
-  function GlyphMetrics
+    return cs.Value (fontfacestylename (font));
+  end fontfacestylename;
+
+  function glyphmetrics
    (font       : font_t;
     char_value : wide_character;
     min_x      : access integer;
     max_x      : access integer;
     min_y      : access integer;
     max_y      : access integer;
-    advance    : access integer) return boolean
+    advance    : access integer)
+    return boolean
   is
     tmp_min_x : aliased c.int;
     tmp_max_x : aliased c.int;
     tmp_min_y : aliased c.int;
     tmp_max_y : aliased c.int;
-    advan : aliased c.int;
-     ch16 : constant sdl.uint16 := sdl.uint16 (wide_character'pos (char_value));
-      ret : constant c.int :=
-        GlyphMetrics (font, ch16, tmp_min_x'access, tmp_max_x'access,
-          tmp_min_y'access, tmp_max_y'access, advan'access);
+    advan     : aliased c.int;
+    ch16      : constant sdl.uint16_t := sdl.uint16_t (wide_character'pos (char_value));
+    ret       : constant c.int        :=
+      glyphmetrics
+       (font,
+        ch16,
+        tmp_min_x'access,
+        tmp_max_x'access,
+        tmp_min_y'access,
+        tmp_max_y'access,
+        advan'access);
   begin
     if ret = 0 then
-      min_x.all := integer (tmp_min_x);
-      max_x.all := integer (tmp_max_x);
-      min_y.all := integer (tmp_min_y);
-      max_y.all := integer (tmp_max_y);
+      min_x.all   := integer (tmp_min_x);
+      max_x.all   := integer (tmp_max_x);
+      min_y.all   := integer (tmp_min_y);
+      max_y.all   := integer (tmp_max_y);
       advance.all := integer (advan);
-      return true;
+      return True;
     else
-      return false;
+      return False;
     end if;
-  end GlyphMetrics;
+  end glyphmetrics;
 
-  function SizeText
+  function sizetext
    (font   : font_t;
     text   : string;
     width  : access integer;
@@ -149,19 +163,22 @@ package body SDL.ttf is
     cw         : aliased c.int;
     char_value : aliased c.int;
     ch_array   : aliased c.char_array := c.to_c (text);
-    ret        : constant c.int := SizeText (font,
-      cs.to_chars_ptr (ch_array'unchecked_access), cw'access, char_value'access);
+    ret        : constant c.int       := sizetext
+       (font,
+        cs.to_chars_ptr (ch_array'unchecked_access),
+        cw'access,
+        char_value'access);
   begin
     if ret = 0 then
-      width.all := integer (cw);
+      width.all  := integer (cw);
       height.all := integer (char_value);
-      return true;
+      return True;
     else
-      return false;
+      return False;
     end if;
-  end SizeText;
+  end sizetext;
 
-  function SizeUTF8
+  function sizeutf8
    (font   : font_t;
     text   : string;
     width  : access integer;
@@ -170,19 +187,22 @@ package body SDL.ttf is
     cw         : aliased c.int;
     char_value : aliased c.int;
     ch_array   : aliased c.char_array := c.to_c (text);
-    ret        : constant c.int := SizeUTF8 (font,
-      cs.to_chars_ptr (ch_array'unchecked_access), cw'access, char_value'access);
+    ret        : constant c.int       := sizeutf8
+       (font,
+        cs.to_chars_ptr (ch_array'unchecked_access),
+        cw'access,
+        char_value'access);
   begin
     if ret = 0 then
-      width.all := integer (cw);
+      width.all  := integer (cw);
       height.all := integer (char_value);
-      return true;
+      return True;
     else
-      return false;
+      return False;
     end if;
-  end SizeUTF8;
+  end sizeutf8;
 
-  function SizeUNICODE
+  function sizeunicode
    (font   : font_t;
     text   : string;
     width  : access integer;
@@ -191,139 +211,183 @@ package body SDL.ttf is
     cw         : aliased c.int;
     char_value : aliased c.int;
     ch_array   : aliased c.char_array := c.to_c (text);
-    ret        : constant c.int := SizeUNICODE (font,
-      cs.to_chars_ptr (ch_array'unchecked_access), cw'access, char_value'access);
+    ret        : constant c.int       := sizeunicode
+       (font,
+        cs.to_chars_ptr (ch_array'unchecked_access),
+        cw'access,
+        char_value'access);
   begin
     if ret = 0 then
-      width.all := integer (cw);
+      width.all  := integer (cw);
       height.all := integer (char_value);
-      return true;
+      return True;
     else
-      return false;
+      return False;
     end if;
-  end SizeUNICODE;
+  end sizeunicode;
 
-  function RenderText_Solid
+  function rendertext_solid
    (font       : font_t;
     text       : string;
-    foreground : color_t) return vid.surface_ptr_t
+    foreground : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderText_Solid (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground);
-  end RenderText_Solid;
+    return rendertext_solid
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground);
+  end rendertext_solid;
 
-  function RenderUTF8_Solid
+  function renderutf8_solid
    (font       : font_t;
     text       : string;
-    foreground : color_t) return vid.surface_ptr_t
+    foreground : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderUTF8_Solid (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground);
-  end RenderUTF8_Solid;
+    return renderutf8_solid
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground);
+  end renderutf8_solid;
 
-  function RenderUNICODE_Solid
+  function renderunicode_solid
    (font       : font_t;
     text       : string;
-    foreground : color_t) return vid.surface_ptr_t
+    foreground : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderUNICODE_Solid (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground);
-  end RenderUNICODE_Solid;
+    return renderunicode_solid
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground);
+  end renderunicode_solid;
 
-  function RenderGlyph_Solid
+  function renderglyph_solid
    (font       : font_t;
     glyph      : wide_character;
-    foreground : color_t) return vid.surface_ptr_t is
+    foreground : color_t) return vid.surface_access_t is
   begin
-    return RenderGlyph_Solid (font, sdl.uint16 (wide_character'pos (glyph)), foreground);
-  end RenderGlyph_Solid;
- 
-  function RenderText_Shaded
+    return renderglyph_solid
+     (font,
+      sdl.uint16_t (wide_character'pos (glyph)),
+      foreground);
+  end renderglyph_solid;
+
+  function rendertext_shaded
    (font       : font_t;
     text       : string;
     foreground : color_t;
-    background : color_t) return vid.surface_ptr_t
+    background : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderText_Shaded (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground, background);
-  end RenderText_Shaded;
+    return rendertext_shaded
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground,
+      background);
+  end rendertext_shaded;
 
-  function RenderUTF8_Shaded
+  function renderutf8_shaded
    (font       : font_t;
     text       : string;
     foreground : color_t;
-    background : color_t) return vid.surface_ptr_t
+    background : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderUTF8_Shaded (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground, background);
-  end RenderUTF8_Shaded;
+    return renderutf8_shaded
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground,
+      background);
+  end renderutf8_shaded;
 
-  function RenderUNICODE_Shaded
+  function renderunicode_shaded
    (font       : font_t;
     text       : string;
     foreground : color_t;
-    background : color_t) return vid.surface_ptr_t
+    background : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderUNICODE_Shaded (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground, background);
-  end RenderUNICODE_Shaded;
+    return renderunicode_shaded
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground,
+      background);
+  end renderunicode_shaded;
 
-  function RenderGlyph_Shaded
+  function renderglyph_shaded
    (font       : font_t;
     glyph      : wide_character;
     foreground : color_t;
-    background : color_t) return vid.surface_ptr_t is
+    background : color_t) return vid.surface_access_t is
   begin
-    return RenderGlyph_Shaded (font, sdl.uint16 (wide_character'pos (glyph)), foreground, background);
-  end RenderGlyph_Shaded;
- 
-  function RenderText_Blended
+    return renderglyph_shaded
+     (font,
+      sdl.uint16_t (wide_character'pos (glyph)),
+      foreground,
+      background);
+  end renderglyph_shaded;
+
+  function rendertext_blended
    (font       : font_t;
     text       : string;
-    foreground : color_t) return vid.surface_ptr_t
+    foreground : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderText_Blended (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground);
-  end RenderText_Blended;
+    return rendertext_blended
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground);
+  end rendertext_blended;
 
-  function RenderUTF8_Blended
+  function renderutf8_blended
    (font       : font_t;
     text       : string;
-    foreground : color_t) return vid.surface_ptr_t
+    foreground : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderUTF8_Blended (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground);
-  end RenderUTF8_Blended;
+    return renderutf8_blended
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground);
+  end renderutf8_blended;
 
-  function RenderUNICODE_Blended
+  function renderunicode_blended
    (font       : font_t;
     text       : string;
-    foreground : color_t) return vid.surface_ptr_t
+    foreground : color_t) return vid.surface_access_t
   is
     ch_array : aliased c.char_array := c.to_c (text);
   begin
-    return RenderUNICODE_Blended (font, cs.to_chars_ptr (ch_array'unchecked_access), foreground);
-  end RenderUNICODE_Blended;
+    return renderunicode_blended
+     (font,
+      cs.to_chars_ptr (ch_array'unchecked_access),
+      foreground);
+  end renderunicode_blended;
 
-  function RenderGlyph_Blended
+  function renderglyph_blended
    (font       : font_t;
     glyph      : wide_character;
-    foreground : color_t) return vid.surface_ptr_t is
+    foreground : color_t) return vid.surface_access_t
+  is
   begin
-    return RenderGlyph_Blended (font, sdl.uint16 (wide_character'pos (glyph)), foreground);
-  end RenderGlyph_Blended;
+    return renderglyph_blended
+     (font,
+      sdl.uint16_t (wide_character'pos (glyph)),
+      foreground);
+  end renderglyph_blended;
 
-  function WasInit return boolean is
+  function wasinit return boolean is
   begin
-    return WasInit = 1;
-  end WasInit;
+    return wasinit = 1;
+  end wasinit;
 
-end SDL.ttf;
+end sdl.ttf;
