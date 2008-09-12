@@ -35,7 +35,7 @@ package body sdl.ttf is
   function openfontindex
    (file      : string;
     pointsize : integer;
-    index     : g) return font_t
+    index     : long_integer) return font_t
   is
     ch_array : aliased c.char_array := c.to_c (file);
   begin
@@ -57,7 +57,7 @@ package body sdl.ttf is
    (src       : sdl.rwops.rwops_access_t;
     freesrc   : integer;
     pointsize : integer;
-    index     : g) return font_t is
+    index     : long_integer) return font_t is
   begin
     return openfontindexrw
      (src,
@@ -90,10 +90,10 @@ package body sdl.ttf is
     return integer (ret);
   end fontlineskip;
 
-  function fontfaces (font : font_t) return g is
+  function fontfaces (font : font_t) return long_integer is
     ret : constant c.long := fontfaces (font);
   begin
-    return g (ret);
+    return long_integer (ret);
   end fontfaces;
 
   function fontfaceisfixedwidth (font : font_t) return boolean is
