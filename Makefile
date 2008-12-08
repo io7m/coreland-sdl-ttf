@@ -32,8 +32,8 @@ flags-sdl-ada:
 	@echo SYSDEPS sdl-ada-flags run create flags-sdl-ada 
 	@(cd SYSDEPS/modules/sdl-ada-flags && ./run)
 libs-sdl-ada:
-	@echo SYSDEPS sdl-ada-libs run create libs-sdl-ada 
-	@(cd SYSDEPS/modules/sdl-ada-libs && ./run)
+	@echo SYSDEPS sdl-ada-libs-S run create libs-sdl-ada 
+	@(cd SYSDEPS/modules/sdl-ada-libs-S && ./run)
 libs-sdl:
 	@echo SYSDEPS sdl-libs run create libs-sdl 
 	@(cd SYSDEPS/modules/sdl-libs && ./run)
@@ -45,9 +45,9 @@ libs-sdl-ttf:
 sdl-ada-flags_clean:
 	@echo SYSDEPS sdl-ada-flags clean flags-sdl-ada 
 	@(cd SYSDEPS/modules/sdl-ada-flags && ./clean)
-sdl-ada-libs_clean:
-	@echo SYSDEPS sdl-ada-libs clean libs-sdl-ada 
-	@(cd SYSDEPS/modules/sdl-ada-libs && ./clean)
+sdl-ada-libs-S_clean:
+	@echo SYSDEPS sdl-ada-libs-S clean libs-sdl-ada 
+	@(cd SYSDEPS/modules/sdl-ada-libs-S && ./clean)
 sdl-libs_clean:
 	@echo SYSDEPS sdl-libs clean libs-sdl 
 	@(cd SYSDEPS/modules/sdl-libs && ./clean)
@@ -58,7 +58,7 @@ sdl-ttf-libs_clean:
 
 sysdeps_clean:\
 sdl-ada-flags_clean \
-sdl-ada-libs_clean \
+sdl-ada-libs-S_clean \
 sdl-libs_clean \
 sdl-ttf-libs_clean \
 
