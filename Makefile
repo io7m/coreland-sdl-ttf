@@ -31,8 +31,8 @@ install-check: instchk conf-sosuffix
 flags-sdl-ada:
 	@echo SYSDEPS sdl-ada-flags run create flags-sdl-ada 
 	@(cd SYSDEPS/modules/sdl-ada-flags && ./run)
-libs-sdl-ada:
-	@echo SYSDEPS sdl-ada-libs-S run create libs-sdl-ada 
+libs-sdl-ada-S:
+	@echo SYSDEPS sdl-ada-libs-S run create libs-sdl-ada-S 
 	@(cd SYSDEPS/modules/sdl-ada-libs-S && ./run)
 libs-sdl:
 	@echo SYSDEPS sdl-libs run create libs-sdl 
@@ -46,7 +46,7 @@ sdl-ada-flags_clean:
 	@echo SYSDEPS sdl-ada-flags clean flags-sdl-ada 
 	@(cd SYSDEPS/modules/sdl-ada-flags && ./clean)
 sdl-ada-libs-S_clean:
-	@echo SYSDEPS sdl-ada-libs-S clean libs-sdl-ada 
+	@echo SYSDEPS sdl-ada-libs-S clean libs-sdl-ada-S 
 	@(cd SYSDEPS/modules/sdl-ada-libs-S && ./clean)
 sdl-libs_clean:
 	@echo SYSDEPS sdl-libs clean libs-sdl 
@@ -74,7 +74,7 @@ conf-adacomp conf-adatype conf-systype conf-adacflags conf-adafflist \
 	flags-sdl-ada
 
 ada-link:\
-conf-adalink conf-adatype conf-systype conf-aldfflist libs-sdl-ada
+conf-adalink conf-adatype conf-systype conf-aldfflist libs-sdl-ada-S
 
 ada-srcmap:\
 conf-adacomp conf-adatype conf-systype
