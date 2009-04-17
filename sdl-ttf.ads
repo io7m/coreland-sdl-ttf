@@ -1,49 +1,48 @@
-with sdl;
-with sdl.rwops;
-with sdl.video;
-with Interfaces.C.strings;
+with SDL;
+with SDL.RWops;
+with SDL.Video;
+with Interfaces.C.Strings;
 with Interfaces.C;
 with System;
 
-package sdl.ttf is
-  package c renames Interfaces.C;
-  package cs renames Interfaces.C.strings;
-  package vid renames sdl.video;
+package SDL.TTF is
+  package C renames Interfaces.C;
+  package CS renames Interfaces.C.Strings;
 
   -- TTF_Font type is completely abstract
-  type font_t is access System.Address;
+  type Font_t is access System.Address;
 
-  -- Specialized color type, necessary because SDL_ttf expects color structures
+  -- Specialized color type, necessary because SDL_TTF expects color structures
   -- by value and this requires a pragma convention.
 
-  type color_t is record
-    r : sdl.uint8_t;
-    g : sdl.uint8_t;
-    b : sdl.uint8_t;
-    a : sdl.uint8_t;
+  type Color_t is record
+    R : SDL.Uint8_t;
+    G : SDL.Uint8_t;
+    B : SDL.Uint8_t;
+    A : SDL.Uint8_t;
   end record;
-  pragma convention (c_pass_by_copy, color_t);
+  pragma Convention (C_Pass_By_Copy, Color_t);
 
   --
   -- This function tells the library whether UNICODE text is generally
   -- byteswapped.  A UNICODE BOM character in a string will override
   -- this setting for the remainder of that string.
   --
-  procedure byteswappedunicode (swapped : c.int);
-  procedure byte_swapped_unicode (swapped : c.int) renames byteswappedunicode;
-  pragma import (c, byteswappedunicode, "TTF_ByteSwappedUNICODE");
+  procedure ByteSwappedUnicode (Swapped : C.int);
+  procedure Byte_Swapped_Unicode (Swapped : C.int) renames ByteSwappedUnicode;
+  pragma Import (C, ByteSwappedUnicode, "TTF_ByteSwappedUnicode");
 
-  procedure byteswappedunicode (swapped : boolean);
-  pragma inline (byteswappedunicode);
+  procedure ByteSwappedUnicode (Swapped : Boolean);
+  pragma Inline (ByteSwappedUnicode);
 
   --
   -- Initialize the TTF engine - return s 0 if successful, -1 on error
   --
-  function init return c.int;
-  pragma import (c, init, "TTF_Init");
+  function Init return  C.int;
+  pragma Import (C, Init, "TTF_Init");
 
-  function init return boolean;
-  pragma inline (init);
+  function Init return Boolean;
+  pragma Inline (Init);
 
   --
   -- Open a font file and create a font of the specified point size.
@@ -52,95 +51,99 @@ package sdl.ttf is
   -- is too high, the last indexed size will be the default.
   --
 
-  function openfont
-   (file      : cs.chars_ptr;
-    pointsize : c.int) return font_t;
+  function OpenFont (File : CS.chars_ptr; Point_Size : C.int) return Font_t;
 
-  function openfontindex
-   (file      : cs.chars_ptr;
-    pointsize : c.int;
-    index     : c.long) return font_t;
+  function OpenFontIndex
+   (File      : CS.chars_ptr;
+    Point_Size : C.int;
+    Index     : C.long)
+    return      Font_t;
 
-  function openfontrw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : c.int;
-    pointsize : c.int) return font_t;
+  function OpenFontRW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : C.int;
+    Point_Size : C.int)
+    return      Font_t;
 
-  function openfontindexrw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : c.int;
-    pointsize : c.int;
-    index     : c.long) return font_t;
+  function OpenFontIndexRW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : C.int;
+    Point_Size : C.int;
+    Index     : C.long)
+    return      Font_t;
 
-  function open_font
-   (file      : cs.chars_ptr;
-    pointsize : c.int) return font_t renames openfont;
+  function Open_Font (File : CS.chars_ptr; Point_Size : C.int) return Font_t renames OpenFont;
 
-  function open_font_index
-   (file      : cs.chars_ptr;
-    pointsize : c.int;
-    index     : c.long) return font_t renames openfontindex;
+  function Open_Font_Index
+   (File      : CS.chars_ptr;
+    Point_Size : C.int;
+    Index     : C.long)
+    return      Font_t renames OpenFontIndex;
 
-  function open_font_rw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : c.int;
-    pointsize : c.int) return font_t renames openfontrw;
+  function Open_Font_RW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : C.int;
+    Point_Size : C.int)
+    return      Font_t renames OpenFontRW;
 
-  function open_font_index_rw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : c.int;
-    pointsize : c.int;
-    index     : c.long) return font_t renames openfontindexrw;
+  function Open_Font_Index_RW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : C.int;
+    Point_Size : C.int;
+    Index     : C.long)
+    return      Font_t renames OpenFontIndexRW;
 
-  pragma import (c, openfont, "TTF_OpenFont");
-  pragma import (c, openfontindex, "TTF_OpenFontIndex");
-  pragma import (c, openfontrw, "TTF_OpenFontRW");
-  pragma import (c, openfontindexrw, "TTF_OpenFontIndexRW");
+  pragma Import (C, OpenFont, "TTF_OpenFont");
+  pragma Import (C, OpenFontIndex, "TTF_OpenFontIndex");
+  pragma Import (C, OpenFontRW, "TTF_OpenFontRW");
+  pragma Import (C, OpenFontIndexRW, "TTF_OpenFontIndexRW");
 
-  function openfont
-   (file      : string;
-    pointsize : integer) return font_t;
+  function OpenFont (File : String; Point_Size : Integer) return Font_t;
 
-  function openfontindex
-   (file      : string;
-    pointsize : integer;
-    index     : long_integer) return font_t;
+  function OpenFontIndex
+   (File      : String;
+    Point_Size : Integer;
+    Index     : Long_Integer)
+    return      Font_t;
 
-  function openfontrw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : integer;
-    pointsize : integer) return font_t;
+  function OpenFontRW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : Integer;
+    Point_Size : Integer)
+    return      Font_t;
 
-  function openfontindexrw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : integer;
-    pointsize : integer;
-    index     : long_integer) return font_t;
+  function OpenFontIndexRW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : Integer;
+    Point_Size : Integer;
+    Index     : Long_Integer)
+    return      Font_t;
 
-  function open_font
-   (file      : string;
-    pointsize : integer) return font_t renames openfont;
+  function Open_Font (File : String; Point_Size : Integer) return Font_t renames OpenFont;
 
-  function open_font_index
-   (file      : string;
-    pointsize : integer;
-    index     : long_integer) return font_t renames openfontindex;
+  function Open_Font_Index
+   (File      : String;
+    Point_Size : Integer;
+    Index     : Long_Integer)
+    return      Font_t renames OpenFontIndex;
 
-  function open_font_rw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : integer;
-    pointsize : integer) return font_t renames openfontrw;
+  function Open_Font_RW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : Integer;
+    Point_Size : Integer)
+    return      Font_t renames OpenFontRW;
 
-  function open_font_index_rw
-   (src       : sdl.rwops.rwops_access_t;
-    freesrc   : integer;
-    pointsize : integer;
-    index     : long_integer) return font_t renames openfontindexrw;
+  function Open_Font_Index_RW
+   (Source       : RWops.RWops_Access_t;
+    Free_Source   : Integer;
+    Point_Size : Integer;
+    Index     : Long_Integer)
+    return      Font_t renames OpenFontIndexRW;
 
-  pragma inline (openfont);
-  pragma inline (openfontindex);
-  pragma inline (openfontrw);
-  pragma inline (openfontindexrw);
+  pragma Inline (OpenFont);
+  pragma Inline (OpenFontIndex);
+  pragma Inline (OpenFontRW);
+  pragma Inline (OpenFontIndexRW);
 
   --
   -- Set and retrieve the font style.
@@ -148,222 +151,238 @@ package sdl.ttf is
   -- doesn't reflect any inherent properties of the truetype font file.
   --
 
-  style_normal    : constant c.int := 2#00000000#;
-  style_bold      : constant c.int := 2#00000001#;
-  style_italic    : constant c.int := 2#00000010#;
-  style_underline : constant c.int := 2#00000100#;
+  Style_Normal    : constant := 2#00000000#;
+  Style_Bold      : constant := 2#00000001#;
+  Style_Italic    : constant := 2#00000010#;
+  Style_Underline : constant := 2#00000100#;
 
-  function getfontstyle (font : font_t) return c.int;
-  function get_font_style (font : font_t) return c.int renames getfontstyle;
-  procedure setfontstyle (font : font_t; style : c.int);
-  procedure set_font_style (font : font_t; style : c.int) renames setfontstyle;
-  pragma import (c, getfontstyle, "TTF_GetFontStyle");
-  pragma import (c, setfontstyle, "TTF_SetFontStyle");
+  function GetFontStyle (Font : Font_t) return C.int;
+  function Get_Font_Style (Font : Font_t) return C.int renames GetFontStyle;
+  procedure SetFontStyle (Font : Font_t; Style : C.int);
+  procedure Set_Font_Style (Font : Font_t; Style : C.int) renames SetFontStyle;
+  pragma Import (C, GetFontStyle, "TTF_GetFontStyle");
+  pragma Import (C, SetFontStyle, "TTF_SetFontStyle");
 
   --
   -- Get the total height of the font - usually equal to point size
   --
-  function fontheight (font : font_t) return c.int;
-  function font_height (font : font_t) return c.int renames fontheight;
-  pragma import (c, fontheight, "TTF_FontHeight");
+  function FontHeight (Font : Font_t) return C.int;
+  function Font_Height (Font : Font_t) return C.int renames FontHeight;
+  pragma Import (C, FontHeight, "TTF_FontHeight");
 
-  function fontheight (font : font_t) return integer;
-  function font_height (font : font_t) return integer renames fontheight;
-  pragma inline (fontheight);
+  function FontHeight (Font : Font_t) return Integer;
+  function Font_Height (Font : Font_t) return Integer renames FontHeight;
+  pragma Inline (FontHeight);
 
   --
   -- Get the offset from the baseline to the top of the font
   -- This is a positive value, relative to the baseline.
   --
-  function fontascent (font : font_t) return c.int;
-  function font_ascent (font : font_t) return c.int renames fontascent;
-  pragma import (c, fontascent, "TTF_FontAscent");
+  function FontAscent (Font : Font_t) return C.int;
+  function Font_Ascent (Font : Font_t) return C.int renames FontAscent;
+  pragma Import (C, FontAscent, "TTF_FontAscent");
 
-  function fontascent (font : font_t) return integer;
-  function font_ascent (font : font_t) return integer renames fontascent;
-  pragma inline (fontascent);
+  function FontAscent (Font : Font_t) return Integer;
+  function Font_Ascent (Font : Font_t) return Integer renames FontAscent;
+  pragma Inline (FontAscent);
 
   --
   -- Get the offset from the baseline to the bottom of the font
   -- This is a negative value, relative to the baseline.
   --
-  function fontdescent (font : font_t) return c.int;
-  function font_descent (font : font_t) return c.int renames fontdescent;
-  pragma import (c, fontdescent, "TTF_FontDescent");
+  function FontDescent (Font : Font_t) return C.int;
+  function Font_Descent (Font : Font_t) return C.int renames FontDescent;
+  pragma Import (C, FontDescent, "TTF_FontDescent");
 
-  function fontdescent (font : font_t) return integer;
-  function font_descent (font : font_t) return integer renames fontdescent;
-  pragma inline (fontdescent);
+  function FontDescent (Font : Font_t) return Integer;
+  function Font_Descent (Font : Font_t) return Integer renames FontDescent;
+  pragma Inline (FontDescent);
 
   --
   -- Get the recommended spacing between lines of text for this font
   --
-  function fontlineskip (font : font_t) return c.int;
-  function font_line_skip (font : font_t) return c.int renames fontlineskip;
-  pragma import (c, fontlineskip, "TTF_FontLineSkip");
+  function FontLineSkip (Font : Font_t) return C.int;
+  function Font_Line_Skip (Font : Font_t) return C.int renames FontLineSkip;
+  pragma Import (C, FontLineSkip, "TTF_FontLineSkip");
 
-  function fontlineskip (font : font_t) return integer;
-  function font_line_skip (font : font_t) return integer renames fontlineskip;
-  pragma inline (fontlineskip);
+  function FontLineSkip (Font : Font_t) return Integer;
+  function Font_Line_Skip (Font : Font_t) return Integer renames FontLineSkip;
+  pragma Inline (FontLineSkip);
 
   --
   -- Get the number of faces of the font
   --
-  function fontfaces (font : font_t) return c.long;
-  function font_faces (font : font_t) return c.long renames fontfaces;
-  pragma import (c, fontfaces, "TTF_FontFaces");
+  function FontFaces (Font : Font_t) return C.long;
+  function Font_Faces (Font : Font_t) return C.long renames FontFaces;
+  pragma Import (C, FontFaces, "TTF_FontFaces");
 
-  function fontfaces (font : font_t) return long_integer;
-  function font_faces (font : font_t) return long_integer renames fontfaces;
-  pragma inline (fontfaces);
+  function FontFaces (Font : Font_t) return Long_Integer;
+  function Font_Faces (Font : Font_t) return Long_Integer renames FontFaces;
+  pragma Inline (FontFaces);
 
   --
   -- Get the font face attributes, if any.
   --
-  function fontfaceisfixedwidth (font : font_t) return c.int;
-  function fontfacefamilyname (font : font_t) return cs.chars_ptr;
-  function fontfacestylename (font : font_t) return cs.chars_ptr;
-  function font_face_is_fixed_width (font : font_t) return c.int renames fontfaceisfixedwidth;
-  function font_face_family_name (font : font_t) return cs.chars_ptr renames fontfacefamilyname;
-  function font_face_style_name (font : font_t) return cs.chars_ptr renames fontfacestylename;
-  pragma import (c, fontfaceisfixedwidth, "TTF_FontFaceIsFixedWidth");
-  pragma import (c, fontfacefamilyname, "TTF_FontFaceFamilyName");
-  pragma import (c, fontfacestylename, "TTF_FontFaceStyleName");
+  function FontFaceIsFixedWidth (Font : Font_t) return C.int;
+  function FontFaceFamilyName (Font : Font_t) return CS.chars_ptr;
+  function FontFaceStyleName (Font : Font_t) return CS.chars_ptr;
+  function Font_Face_Is_Fixed_Width (Font : Font_t) return C.int renames FontFaceIsFixedWidth;
+  function Font_Face_Family_Name (Font : Font_t) return CS.chars_ptr renames FontFaceFamilyName;
+  function Font_Face_Style_Name (Font : Font_t) return CS.chars_ptr renames FontFaceStyleName;
+  pragma Import (C, FontFaceIsFixedWidth, "TTF_FontFaceIsFixedWidth");
+  pragma Import (C, FontFaceFamilyName, "TTF_FontFaceFamilyName");
+  pragma Import (C, FontFaceStyleName, "TTF_FontFaceStyleName");
 
-  function fontfaceisfixedwidth (font : font_t) return boolean;
-  function fontfacefamilyname (font : font_t) return string;
-  function fontfacestylename (font : font_t) return string;
-  function font_face_is_fixed_width (font : font_t) return boolean renames fontfaceisfixedwidth;
-  function font_face_family_name (font : font_t) return string renames fontfacefamilyname;
-  function font_face_style_name (font : font_t) return string renames fontfacestylename;
-  pragma inline (fontfaceisfixedwidth);
-  pragma inline (fontfacefamilyname);
-  pragma inline (fontfacestylename);
+  function FontFaceIsFixedWidth (Font : Font_t) return Boolean;
+  function FontFaceFamilyName (Font : Font_t) return String;
+  function FontFaceStyleName (Font : Font_t) return String;
+  function Font_Face_Is_Fixed_Width (Font : Font_t) return Boolean renames FontFaceIsFixedWidth;
+  function Font_Face_Family_Name (Font : Font_t) return String renames FontFaceFamilyName;
+  function Font_Face_Style_Name (Font : Font_t) return String renames FontFaceStyleName;
+  pragma Inline (FontFaceIsFixedWidth);
+  pragma Inline (FontFaceFamilyName);
+  pragma Inline (FontFaceStyleName);
 
   --
-  -- Get the metrics (dimensions) of a glyph
-  -- To understand what these metrics mean, here is a useful link :
-  -- http ://freetype.sourceforge.net/freetype2/docs/tutorial/step2.html
+  -- Get the metriCS (dimensions) of a glyph
+  -- To understand what these metriCS mean, here is a useful link :
+  -- http ://freetype.sourceforge.net/freetype2/doCS/tutorial/step2.html
   --
-  function glyphmetrics
-   (font       : font_t;
-    char_value : sdl.uint16_t;
-    min_x      : access c.int;
-    max_x      : access c.int;
-    min_y      : access c.int;
-    max_y      : access c.int;
-    advance    : access c.int) return c.int;
-  function glyph_metrics
-   (font       : font_t;
-    char_value : sdl.uint16_t;
-    min_x      : access c.int;
-    max_x      : access c.int;
-    min_y      : access c.int;
-    max_y      : access c.int;
-    advance    : access c.int) return c.int renames glyphmetrics;
-  pragma import (c, glyphmetrics, "TTF_GlyphMetrics");
+  function GlyphMetrics
+   (Font       : Font_t;
+    Char_Value : SDL.Uint16_t;
+    Min_X      : access C.int;
+    Max_X      : access C.int;
+    Min_Y      : access C.int;
+    Max_Y      : access C.int;
+    Advance    : access C.int)
+    return       C.int;
+  function Glyph_Metrics
+   (Font       : Font_t;
+    Char_Value : SDL.Uint16_t;
+    Min_X      : access C.int;
+    Max_X      : access C.int;
+    Min_Y      : access C.int;
+    Max_Y      : access C.int;
+    Advance    : access C.int)
+    return       C.int renames GlyphMetrics;
+  pragma Import (C, GlyphMetrics, "TTF_GlyphMetrics");
 
-  function glyphmetrics
-   (font       : font_t;
-    char_value : wide_character;
-    min_x      : access integer;
-    max_x      : access integer;
-    min_y      : access integer;
-    max_y      : access integer;
-    advance    : access integer) return boolean;
+  function GlyphMetrics
+   (Font       : Font_t;
+    Char_Value : Wide_Character;
+    Min_X      : access Integer;
+    Max_X      : access Integer;
+    Min_Y      : access Integer;
+    Max_Y      : access Integer;
+    Advance    : access Integer)
+    return       Boolean;
 
-  function glyph_metrics
-   (font       : font_t;
-    char_value : wide_character;
-    min_x      : access integer;
-    max_x      : access integer;
-    min_y      : access integer;
-    max_y      : access integer;
-    advance    : access integer) return boolean renames glyphmetrics;
-  pragma inline (glyphmetrics);
+  function Glyph_Metrics
+   (Font       : Font_t;
+    Char_Value : Wide_Character;
+    Min_X      : access Integer;
+    Max_X      : access Integer;
+    Min_Y      : access Integer;
+    Max_Y      : access Integer;
+    Advance    : access Integer)
+    return       Boolean renames GlyphMetrics;
+  pragma Inline (GlyphMetrics);
 
   --
   -- Get the dimensions of a rendered string of text
   --
-  function sizetext
-   (font   : font_t;
-    text   : cs.chars_ptr;
-    width  : access c.int;
-    height : access c.int) return c.int;
+  function SizeText
+   (Font   : Font_t;
+    Text   : CS.chars_ptr;
+    Width  : access C.int;
+    Height : access C.int)
+    return   C.int;
 
-  function sizeutf8
-   (font   : font_t;
-    text   : cs.chars_ptr;
-    width  : access c.int;
-    height : access c.int) return c.int;
+  function SizeUTF8
+   (Font   : Font_t;
+    Text   : CS.chars_ptr;
+    Width  : access C.int;
+    Height : access C.int)
+    return   C.int;
 
-  function sizeunicode
-   (font   : font_t;
-    text   : cs.chars_ptr;
-    width  : access c.int;
-    height : access c.int) return c.int;
+  function SizeUnicode
+   (Font   : Font_t;
+    Text   : CS.chars_ptr;
+    Width  : access C.int;
+    Height : access C.int)
+    return   C.int;
 
-  function size_text
-   (font   : font_t;
-    text   : cs.chars_ptr;
-    width  : access c.int;
-    height : access c.int) return c.int renames sizetext;
+  function Size_Text
+   (Font   : Font_t;
+    Text   : CS.chars_ptr;
+    Width  : access C.int;
+    Height : access C.int)
+    return   C.int renames SizeText;
 
-  function size_utf8
-   (font   : font_t;
-    text   : cs.chars_ptr;
-    width  : access c.int;
-    height : access c.int) return c.int renames sizeutf8;
+  function Size_UTF8
+   (Font   : Font_t;
+    Text   : CS.chars_ptr;
+    Width  : access C.int;
+    Height : access C.int)
+    return   C.int renames SizeUTF8;
 
-  function size_unicode
-   (font   : font_t;
-    text   : cs.chars_ptr;
-    width  : access c.int;
-    height : access c.int) return c.int renames sizeunicode;
+  function Size_Unicode
+   (Font   : Font_t;
+    Text   : CS.chars_ptr;
+    Width  : access C.int;
+    Height : access C.int)
+    return   C.int renames SizeUnicode;
 
-  pragma import (c, sizetext, "TTF_SizeText");
-  pragma import (c, sizeutf8, "TTF_SizeUTF8");
-  pragma import (c, sizeunicode, "TTF_SizeUNICODE");
+  pragma Import (C, SizeText, "TTF_SizeText");
+  pragma Import (C, SizeUTF8, "TTF_SizeUTF8");
+  pragma Import (C, SizeUnicode, "TTF_SizeUnicode");
 
-  function sizetext
-   (font   : font_t;
-    text   : string;
-    width  : access integer;
-    height : access integer) return boolean;
+  function SizeText
+   (Font   : Font_t;
+    Text   : String;
+    Width  : access Integer;
+    Height : access Integer)
+    return   Boolean;
 
-  function sizeutf8
-   (font   : font_t;
-    text   : string;
-    width  : access integer;
-    height : access integer) return boolean;
+  function SizeUTF8
+   (Font   : Font_t;
+    Text   : String;
+    Width  : access Integer;
+    Height : access Integer)
+    return   Boolean;
 
-  function sizeunicode
-   (font   : font_t;
-    text   : string;
-    width  : access integer;
-    height : access integer) return boolean;
+  function SizeUnicode
+   (Font   : Font_t;
+    Text   : String;
+    Width  : access Integer;
+    Height : access Integer)
+    return   Boolean;
 
-  function size_text
-   (font   : font_t;
-    text   : string;
-    width  : access integer;
-    height : access integer) return boolean renames sizetext;
+  function Size_Text
+   (Font   : Font_t;
+    Text   : String;
+    Width  : access Integer;
+    Height : access Integer)
+    return   Boolean renames SizeText;
 
-  function size_utf8
-   (font   : font_t;
-    text   : string;
-    width  : access integer;
-    height : access integer) return boolean renames sizeutf8;
+  function Size_UTF8
+   (Font   : Font_t;
+    Text   : String;
+    Width  : access Integer;
+    Height : access Integer)
+    return   Boolean renames SizeUTF8;
 
-  function size_unicode
-   (font   : font_t;
-    text   : string;
-    width  : access integer;
-    height : access integer) return boolean renames sizeunicode;
+  function Size_Unicode
+   (Font   : Font_t;
+    Text   : String;
+    Width  : access Integer;
+    Height : access Integer)
+    return   Boolean renames SizeUnicode;
 
-  pragma inline (sizetext);
-  pragma inline (sizeutf8);
-  pragma inline (sizeunicode);
+  pragma Inline (SizeText);
+  pragma Inline (SizeUTF8);
+  pragma Inline (SizeUnicode);
 
   --
   -- Create an 8-bit palettized surface and render the given text at
@@ -372,73 +391,85 @@ package sdl.ttf is
   -- to the text color.
   -- This function return s the new surface, or NULL if there was an error.
   --
-  function rendertext_solid
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t;
+  function RenderText_Solid
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
 
-  function renderutf8_solid
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t;
+  function RenderUTF8_Solid
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
 
-  function renderunicode_solid
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t;
+  function RenderUnicode_Solid
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
 
-  function render_text_solid
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t renames rendertext_solid;
+  function Render_Text_Solid
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderText_Solid;
 
-  function render_utf8_solid
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t renames renderutf8_solid;
+  function Render_Utf8_Solid
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUTF8_Solid;
 
-  function render_unicode_solid
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t renames renderunicode_solid;
+  function Render_Unicode_Solid
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUnicode_Solid;
 
-  pragma import (c, rendertext_solid, "TTF_RenderText_Solid");
-  pragma import (c, renderutf8_solid, "TTF_RenderUTF8_Solid");
-  pragma import (c, renderunicode_solid, "TTF_RenderUNICODE_Solid");
+  pragma Import (C, RenderText_Solid, "TTF_RenderText_Solid");
+  pragma Import (C, RenderUTF8_Solid, "TTF_RenderUTF8_Solid");
+  pragma Import (C, RenderUnicode_Solid, "TTF_RenderUnicode_Solid");
 
-  function rendertext_solid
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t;
+  function RenderText_Solid
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
 
-  function renderutf8_solid
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t;
+  function RenderUTF8_Solid
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
 
-  function renderunicode_solid
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t;
+  function RenderUnicode_Solid
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
 
-  function render_text_solid
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t renames rendertext_solid;
+  function Render_Text_Solid
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderText_Solid;
 
-  function render_utf8_solid
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t renames renderutf8_solid;
+  function Render_Utf8_Solid
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUTF8_Solid;
 
-  function render_unicode_solid
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t renames renderunicode_solid;
+  function Render_Unicode_Solid
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUnicode_Solid;
 
-  pragma inline (rendertext_solid);
-  pragma inline (renderutf8_solid);
-  pragma inline (renderunicode_solid);
+  pragma Inline (RenderText_Solid);
+  pragma Inline (RenderUTF8_Solid);
+  pragma Inline (RenderUnicode_Solid);
 
   --
   -- Create an 8-bit palettized surface and render the given glyph at
@@ -448,25 +479,29 @@ package sdl.ttf is
   -- centering in the X direction, and aligned normally in the Y direction.
   -- This function return s the new surface, or NULL if there was an error.
   --
-  function renderglyph_solid
-   (font       : font_t;
-    glyph      : sdl.uint16_t;
-    foreground : color_t) return vid.surface_access_t;
-  function render_glyph_solid
-   (font       : font_t;
-    glyph      : sdl.uint16_t;
-    foreground : color_t) return vid.surface_access_t renames renderglyph_solid;
-  pragma import (c, renderglyph_solid, "TTF_RenderGlyph_Solid");
+  function RenderGlyph_Solid
+   (Font       : Font_t;
+    Glyph      : SDL.Uint16_t;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Glyph_Solid
+   (Font       : Font_t;
+    Glyph      : SDL.Uint16_t;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderGlyph_Solid;
+  pragma Import (C, RenderGlyph_Solid, "TTF_RenderGlyph_Solid");
 
-  function renderglyph_solid
-   (font       : font_t;
-    glyph      : wide_character;
-    foreground : color_t) return vid.surface_access_t;
-  function render_glyph_solid
-   (font       : font_t;
-    glyph      : wide_character;
-    foreground : color_t) return vid.surface_access_t renames renderglyph_solid;
-  pragma inline (renderglyph_solid);
+  function RenderGlyph_Solid
+   (Font       : Font_t;
+    Glyph      : Wide_Character;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Glyph_Solid
+   (Font       : Font_t;
+    Glyph      : Wide_Character;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderGlyph_Solid;
+  pragma Inline (RenderGlyph_Solid);
 
   --
   -- Create an 8-bit palettized surface and render the given text at
@@ -474,73 +509,85 @@ package sdl.ttf is
   -- while other pixels have varying degrees of the foreground color.
   -- This function return s the new surface, or NULL if there was an error.
   --
-  function rendertext_shaded
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function renderutf8_shaded
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function renderunicode_shaded
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function render_text_shaded
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames rendertext_shaded;
-  function render_utf8_shaded
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames renderutf8_shaded;
-  function render_unicode_shaded
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames renderunicode_shaded;
-  pragma import (c, rendertext_shaded, "TTF_RenderText_Shaded");
-  pragma import (c, renderutf8_shaded, "TTF_RenderUTF8_Shaded");
-  pragma import (c, renderunicode_shaded, "TTF_RenderUNICODE_Shaded");
+  function RenderText_Shaded
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUTF8_Shaded
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUnicode_Shaded
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Text_Shaded
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderText_Shaded;
+  function Render_Utf8_Shaded
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderUTF8_Shaded;
+  function Render_Unicode_Shaded
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderUnicode_Shaded;
+  pragma Import (C, RenderText_Shaded, "TTF_RenderText_Shaded");
+  pragma Import (C, RenderUTF8_Shaded, "TTF_RenderUTF8_Shaded");
+  pragma Import (C, RenderUnicode_Shaded, "TTF_RenderUnicode_Shaded");
 
-  function rendertext_shaded
-   (font       : font_t;
-    text       : string;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function renderutf8_shaded
-   (font       : font_t;
-    text       : string;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function renderunicode_shaded
-   (font       : font_t;
-    text       : string;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function render_text_shaded
-   (font       : font_t;
-    text       : string;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames rendertext_shaded;
-  function render_utf8_shaded
-   (font       : font_t;
-    text       : string;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames renderutf8_shaded;
-  function render_unicode_shaded
-   (font       : font_t;
-    text       : string;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames renderunicode_shaded;
-  pragma inline (rendertext_shaded);
-  pragma inline (renderutf8_shaded);
-  pragma inline (renderunicode_shaded);
+  function RenderText_Shaded
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUTF8_Shaded
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUnicode_Shaded
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Text_Shaded
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderText_Shaded;
+  function Render_Utf8_Shaded
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderUTF8_Shaded;
+  function Render_Unicode_Shaded
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderUnicode_Shaded;
+  pragma Inline (RenderText_Shaded);
+  pragma Inline (RenderUTF8_Shaded);
+  pragma Inline (RenderUnicode_Shaded);
 
   --
   -- Create an 8-bit palettized surface and render the given glyph at
@@ -550,90 +597,106 @@ package sdl.ttf is
   -- direction, and aligned normally in the Y direction.
   -- This function return s the new surface, or NULL if there was an error.
   --
-  function renderglyph_shaded
-   (font       : font_t;
-    glyph      : sdl.uint16_t;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function render_glyph_shaded
-   (font       : font_t;
-    glyph      : sdl.uint16_t;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames renderglyph_shaded;
-  pragma import (c, renderglyph_shaded, "TTF_RenderGlyph_Shaded");
+  function RenderGlyph_Shaded
+   (Font       : Font_t;
+    Glyph      : SDL.Uint16_t;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Glyph_Shaded
+   (Font       : Font_t;
+    Glyph      : SDL.Uint16_t;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderGlyph_Shaded;
+  pragma Import (C, RenderGlyph_Shaded, "TTF_RenderGlyph_Shaded");
 
-  function renderglyph_shaded
-   (font       : font_t;
-    glyph      : wide_character;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t;
-  function render_glyph_shaded
-   (font       : font_t;
-    glyph      : wide_character;
-    foreground : color_t;
-    background : color_t) return vid.surface_access_t renames renderglyph_shaded;
-  pragma inline (renderglyph_shaded);
+  function RenderGlyph_Shaded
+   (Font       : Font_t;
+    Glyph      : Wide_Character;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Glyph_Shaded
+   (Font       : Font_t;
+    Glyph      : Wide_Character;
+    Foreground : Color_t;
+    Background : Color_t)
+    return       Video.Surface_Access_t renames RenderGlyph_Shaded;
+  pragma Inline (RenderGlyph_Shaded);
 
   --
   -- Create a 32-bit ARGB surface and render the given text at high quality,
   -- using alpha blending to dither the font with the given color.
   -- This function return s the new surface, or NULL if there was an error.
   --
-  function rendertext_blended
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t;
-  function renderutf8_blended
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t;
-  function renderunicode_blended
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t;
-  function render_text_blended
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t renames rendertext_blended;
-  function render_utf8_blended
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t renames renderutf8_blended;
-  function render_unicode_blended
-   (font       : font_t;
-    text       : cs.chars_ptr;
-    foreground : color_t) return vid.surface_access_t renames renderunicode_blended;
-  pragma import (c, rendertext_blended, "TTF_RenderText_Blended");
-  pragma import (c, renderutf8_blended, "TTF_RenderUTF8_Blended");
-  pragma import (c, renderunicode_blended, "TTF_RenderUNICODE_Blended");
+  function RenderText_Blended
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUTF8_Blended
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUnicode_Blended
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Text_Blended
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderText_Blended;
+  function Render_Utf8_Blended
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUTF8_Blended;
+  function Render_Unicode_Blended
+   (Font       : Font_t;
+    Text       : CS.chars_ptr;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUnicode_Blended;
+  pragma Import (C, RenderText_Blended, "TTF_RenderText_Blended");
+  pragma Import (C, RenderUTF8_Blended, "TTF_RenderUTF8_Blended");
+  pragma Import (C, RenderUnicode_Blended, "TTF_RenderUnicode_Blended");
 
-  function rendertext_blended
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t;
-  function renderutf8_blended
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t;
-  function renderunicode_blended
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t;
-  function render_text_blended
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t renames rendertext_blended;
-  function render_utf8_blended
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t renames renderutf8_blended;
-  function render_unicode_blended
-   (font       : font_t;
-    text       : string;
-    foreground : color_t) return vid.surface_access_t renames renderunicode_blended;
-  pragma inline (rendertext_blended);
-  pragma inline (renderutf8_blended);
-  pragma inline (renderunicode_blended);
+  function RenderText_Blended
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUTF8_Blended
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function RenderUnicode_Blended
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Text_Blended
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderText_Blended;
+  function Render_Utf8_Blended
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUTF8_Blended;
+  function Render_Unicode_Blended
+   (Font       : Font_t;
+    Text       : String;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderUnicode_Blended;
+  pragma Inline (RenderText_Blended);
+  pragma Inline (RenderUTF8_Blended);
+  pragma Inline (RenderUnicode_Blended);
 
   --
   -- Create a 32-bit ARGB surface and render the given glyph at high quality,
@@ -642,48 +705,52 @@ package sdl.ttf is
   -- direction, and aligned normally in the Y direction.
   -- This function return s the new surface, or NULL if there was an error.
   --
-  function renderglyph_blended
-   (font       : font_t;
-    glyph      : sdl.uint16_t;
-    foreground : color_t) return vid.surface_access_t;
-  function render_glyph_blended
-   (font       : font_t;
-    glyph      : sdl.uint16_t;
-    foreground : color_t) return vid.surface_access_t renames renderglyph_blended;
-  pragma import (c, renderglyph_blended, "TTF_RenderGlyph_Blended");
+  function RenderGlyph_Blended
+   (Font       : Font_t;
+    Glyph      : SDL.Uint16_t;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Glyph_Blended
+   (Font       : Font_t;
+    Glyph      : SDL.Uint16_t;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderGlyph_Blended;
+  pragma Import (C, RenderGlyph_Blended, "TTF_RenderGlyph_Blended");
 
-  function renderglyph_blended
-   (font       : font_t;
-    glyph      : wide_character;
-    foreground : color_t) return vid.surface_access_t;
-  function render_glyph_blended
-   (font       : font_t;
-    glyph      : wide_character;
-    foreground : color_t) return vid.surface_access_t renames renderglyph_blended;
-  pragma inline (renderglyph_blended);
+  function RenderGlyph_Blended
+   (Font       : Font_t;
+    Glyph      : Wide_Character;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t;
+  function Render_Glyph_Blended
+   (Font       : Font_t;
+    Glyph      : Wide_Character;
+    Foreground : Color_t)
+    return       Video.Surface_Access_t renames RenderGlyph_Blended;
+  pragma Inline (RenderGlyph_Blended);
 
   --
   -- Close an opened font file
   --
-  procedure closefont (font : font_t);
-  procedure close_font (font : font_t) renames closefont;
-  pragma import (c, closefont, "TTF_CloseFont");
+  procedure CloseFont (Font : Font_t);
+  procedure Close_Font (Font : Font_t) renames CloseFont;
+  pragma Import (C, CloseFont, "TTF_CloseFont");
 
   --
   -- De-initialize the TTF engine
   --
-  procedure quit;
-  pragma import (c, quit, "TTF_Quit");
+  procedure Quit;
+  pragma Import (C, Quit, "TTF_Quit");
 
   --
   -- Check if the TTF engine is initialized
   --
-  function wasinit return c.int;
-  function was_init return c.int renames wasinit;
-  pragma import (c, wasinit, "TTF_WasInit");
+  function WasInit return  C.int;
+  function Was_Init return  C.int renames WasInit;
+  pragma Import (C, WasInit, "TTF_WasInit");
 
-  function wasinit return boolean;
-  function was_init return boolean renames wasinit;
-  pragma inline (wasinit);
+  function WasInit return Boolean;
+  function Was_Init return Boolean renames WasInit;
+  pragma Inline (WasInit);
 
-end sdl.ttf;
+end SDL.TTF;
